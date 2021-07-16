@@ -4,8 +4,7 @@ import { AppProps } from "next/dist/next-server/lib/router/router";
 import Head from "next/head";
 import numeral from "numeral";
 import React from "react";
-import Head from 'next/head'
-import numeral from 'numeral';
+import prisma from "../lib/prisma";
 import TitleBar from "../components/TitleBar";
 import PlayerList from "../components/ItemList";
 import AddPlayer from "../components/AddItem";
@@ -25,15 +24,26 @@ export default function Home({ items }: AppProps) {
 				<AddPlayer />
 			</div>
 		</div>
+	);
+}
 
-  )
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<
+	GetServerSidePropsResult<{
+		items: Item[];
+	}>
+> {
+	const {} = context;
+	const items = await prisma.item.findMany();
+	return { props: { items } };
 }
 
 // export const calculatePlayerPositions = (players) => {
 //   let rank = 1;
 
 //   return players.map((player, index) => {
-      
+
 //       if (index !== 0 && players[index-1].score > player.score) {
 //           rank++
 //       }
