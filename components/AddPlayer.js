@@ -1,5 +1,4 @@
 import React from "react";
-import { Players } from "./../api/players";
 
 export default class AddPlayer extends React.Component {
     handleSubmit(e){
@@ -11,10 +10,10 @@ export default class AddPlayer extends React.Component {
         if (playerName) {
             e.target.playerName.value = '';
             // players insert
-            Players.insert({
-                name: playerName,
-                score: 0
-            });
+            // Players.insert({
+            //     name: playerName,
+            //     score: 0
+            // });
         }
     }
     render(){
