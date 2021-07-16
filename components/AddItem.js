@@ -2,13 +2,12 @@ import React from "react";
 
 export default class AddPlayer extends React.Component {
     handleSubmit(e){
-        let playerName = e.target.playerName.value;
+        let itemName = e.target.itemName.value;
 
         e.preventDefault();
 
-        debugger;
-        if (playerName) {
-            e.target.playerName.value = '';
+        if (itemName) {
+            e.target.itemName.value = '';
             // players insert
             // Players.insert({
             //     name: playerName,
@@ -20,8 +19,8 @@ export default class AddPlayer extends React.Component {
         return(
             <div className="item">
                 <form className="form" onSubmit={this.handleSubmit.bind(this)}>
-                    <input className="form__input" type="text" name="playerName" placeholder="Player Name"/>
-                    <button className="button">Add Player</button>
+                    <input className="form__input" type="text" name="itemName" placeholder="Item name"/>
+                    <button className="button">Add Item</button>
                 </form>
             </div>
         );

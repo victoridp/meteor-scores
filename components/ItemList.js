@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Player from './Player';
+import Player from './Item';
 import FlipMove from 'react-flip-move';
 
 export default class PlayerList extends React.Component {
@@ -8,7 +8,7 @@ export default class PlayerList extends React.Component {
         if(this.props.players.length === 0){
             return (
                 <div className="item">
-                    <p className="item__message">Add your first player to get started!</p>
+                    <p className="item__message">Add your first item to get started!</p>
                 </div>
             );
         }
