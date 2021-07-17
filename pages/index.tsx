@@ -1,16 +1,22 @@
-import { Item } from "@prisma/client";
-import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
-import { AppProps } from "next/dist/next-server/lib/router/router";
+import { useQuery } from "@apollo/client";
 import Head from "next/head";
 import numeral from "numeral";
-import React from "react";
-import prisma from "../lib/prisma";
-import TitleBar from "../components/TitleBar";
-import PlayerList from "../components/ItemList";
+import React, { useState } from "react";
 import AddPlayer from "../components/AddItem";
+import ItemList from "../components/ItemList";
+import TitleBar from "../components/TitleBar";
+import { ITEMS } from "../graphql/queries";
+import { Item } from "../types/common";
+import { items, items_items } from "../types/graphql/items";
 
-export default function Home({ items }: AppProps) {
-	console.log({ items });
+export default function Home() {
+	const [items, setItems] = useState<items_items[]>([])
+	const {loading} = useQuery<items>(ITEMS, {
+		onCompleted: (data) => {
+			data.items && setItems(data.items)
+		}
+	})
+
 	return (
 		<div>
 			<Head>
@@ -20,39 +26,28 @@ export default function Home({ items }: AppProps) {
 			</Head>
 			<TitleBar title="scores" subtitle="By Victor Iris" />
 			<div className="wrapper">
-				<PlayerList players={items} />
+				<ItemList items={calculateItemsPositions(items)} />
 				<AddPlayer />
 			</div>
 		</div>
 	);
 }
 
-export async function getServerSideProps(
-	context: GetServerSidePropsContext
-): Promise<
-	GetServerSidePropsResult<{
-		items: Item[];
-	}>
-> {
-	const {} = context;
-	const items = await prisma.item.findMany();
-	return { props: { items } };
-}
+export const calculateItemsPositions = (items: items_items[]): Item[] => {
+  let rank = 1;
 
-// export const calculatePlayerPositions = (players) => {
-//   let rank = 1;
+  return items.map((item, index) => {
 
-//   return players.map((player, index) => {
+      if (index !== 0 && items[index-1].score > item.score) {
+          rank++
+      }
 
-//       if (index !== 0 && players[index-1].score > player.score) {
-//           rank++
-//       }
+      return {
+          ...item,
+          rank,
+          position: numeral(rank).format('0o')
+      };
+  });
 
-//       return {
-//           ...player,
-//           rank,
-//           position: numeral(rank).format('0o')
-//       };
-//   });
+};
 
-// };
