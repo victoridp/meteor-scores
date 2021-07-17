@@ -13,7 +13,7 @@ export default function ItemList(props: { items: Item[] }) {
 			);
 		} else {
 			return props.items.map((item) => {
-				return <Player key={item?.id} player={item} />;
+				return <Player key={item?.id} item={item} />;
 			});
 		}
 	}
