@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } from "@reduxjs/toolkit";
 import numeral from "numeral";
-import { UNVOTE_ITEM, VOTE_ITEM } from "../graphql/mutations";
+import { CREATE_ITEM, UNVOTE_ITEM, VOTE_ITEM } from "../graphql/mutations";
 import { ITEMS } from "../graphql/queries";
 import client from "../lib/apolloClient";
 import { Item } from "../types/common";
+import { createItem, createItemVariables } from "../types/graphql/createItem";
+import { CreateItemInput } from "../types/graphql/globalTypes";
 import { items, items_items } from "../types/graphql/items";
 import { unvoteItem, unvoteItemVariables } from "../types/graphql/unvoteItem";
 import { voteItem, voteItemVariables } from "../types/graphql/voteItem";
@@ -14,6 +16,7 @@ const SLICE_NAME = "sampleFeature";
 type ItemsList = {
 	items: items_items[];
 	loading: boolean;
+	creating: boolean;
 	voting: boolean;
 };
 
@@ -21,6 +24,7 @@ const initialState: ItemsList = {
 	items: [],
 	loading: false,
 	voting: false,
+	creating: false,
 };
 
 export const getItems = createAsyncThunk(
@@ -32,6 +36,16 @@ export const getItems = createAsyncThunk(
 		return data.items;
 	}
 );
+
+export const addNewItem = createAsyncThunk(`${SLICE_NAME}/addNewItem`, async (input: CreateItemInput) => {
+	const { data } = await client.mutate<createItem, createItemVariables>({
+		mutation: CREATE_ITEM,
+		variables: {
+			input
+		}
+	});
+	return data?.createItem;
+});
 
 export const addVote = createAsyncThunk(`${SLICE_NAME}/addVote`, async (args: {itemId: string}) => {
 	const { data } = await client.mutate<voteItem, voteItemVariables>({
@@ -75,6 +89,17 @@ export const slice = createSlice({
 		builder.addCase(getItems.rejected, (state, action) => {
 			state.loading = false;
 		});
+		builder.addCase(addNewItem.pending, (state, action) => {
+			state.creating = true;
+		});
+		builder.addCase(addNewItem.fulfilled, (state, action) => {
+			state.creating = false;
+			console.log(action.payload)
+			state.items.push(action.payload!);
+		});
+		builder.addCase(addNewItem.rejected, (state, action) => {
+			state.creating = false;
+		});
 		builder.addMatcher(isPending(addVote, removeVote), (state, action) => {
 			state.voting = true;
 		});
@@ -95,7 +120,9 @@ export const selectItemsList = (state: RootState) => state.itemsList;
 export const selectItems = (state: RootState): Item[] => {
 	let rank = 1;
 	const { items } = state.itemsList;
-	return items.map((item, index) => {
+	const sortedItems = [...items]
+	sortedItems.sort((a, b) => a.score < b.score ? 1 : -1)
+	return sortedItems.map((item, index) => {
 		if (index !== 0 && items[index - 1].score > item.score) {
 			rank++;
 		}
@@ -105,5 +132,5 @@ export const selectItems = (state: RootState): Item[] => {
 			rank,
 			position: numeral(rank).format("0o"),
 		};
-	}).sort((a, b) => a.score < b.score ? 1 : -1);
+	});
 };

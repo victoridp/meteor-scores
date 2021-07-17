@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import AddPlayer from "../components/AddItem";
+import AddItem from "../components/AddItem";
 import ItemList from "../components/ItemList";
 import TitleBar from "../components/TitleBar";
 import { useAppDispatch } from "../store";
@@ -25,7 +25,7 @@ export default function Home() {
 			<TitleBar title="scores" subtitle="By Victor Iris" />
 			<div className="wrapper">
 				<ItemList items={items} />
-				<AddPlayer />
+				<AddItem />
 			</div>
 		</div>
 	);

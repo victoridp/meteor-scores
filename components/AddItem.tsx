@@ -1,28 +1,22 @@
 import React from "react";
-import { useMutation } from "@apollo/client";
-import { CREATE_ITEM } from "../graphql/mutations";
-import { createItem, createItemVariables } from "../types/graphql/createItem";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../store";
+import { addNewItem, selectItemsList } from "../store/itemsList";
 
-export default function AddPlayer() {
-	const [create, { loading }] = useMutation<createItem, createItemVariables>(
-		CREATE_ITEM,
-		{
-			onError: (err) => alert(err.message),
-		}
-	);
+export default function AddItem() {
+	const dispatch = useAppDispatch();
+	const { creating } = useSelector(selectItemsList);
 	function handleSubmit(e: any) {
 		let itemName = e.target.itemName.value;
 		e.preventDefault();
 
 		if (itemName) {
-			create({
-				variables: {
-					input: {
-						name: itemName,
-						score: 0,
-					},
-				},
-			});
+			dispatch(
+				addNewItem({
+					name: itemName,
+					score: 0,
+				})
+			);
 			e.target.itemName.value = "";
 		}
 	}
@@ -35,7 +29,7 @@ export default function AddPlayer() {
 					name="itemName"
 					placeholder="Item name"
 				/>
-				<button className="button" disabled={loading}>
+				<button className="button" disabled={creating}>
 					Add Item
 				</button>
 			</form>
