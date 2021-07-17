@@ -1,12 +1,10 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { useAppDispatch } from "../store";
-import { addVote, removeVote, selectItemsList } from "../store/itemsList";
+import { addVote, removeItem, removeVote } from "../store/itemsList";
 import { Item as ItemType } from "../types/common";
 
 const Item: React.FC<{ item: ItemType }> = ({ item }) => {
 	const dispatch = useAppDispatch();
-	const { voting } = useSelector(selectItemsList);
 	let itemClassName = `item item--position-${item.rank}`;
 	return (
 		<div key={item.id} className={itemClassName}>
@@ -32,7 +30,12 @@ const Item: React.FC<{ item: ItemType }> = ({ item }) => {
 					>
 						+1
 					</button>
-					{/* <button className="button button--round" onClick={()=>Players.remove(this.props.player._id)}>X</button> */}
+					<button
+						className="button button--round"
+						onClick={()=>dispatch(removeItem({ id: item.id }))}
+					>
+						X
+					</button>
 				</div>
 			</div>
 		</div>

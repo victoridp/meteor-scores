@@ -18,16 +18,17 @@ type Item {
   score: Int!
 }
 
+input ItemWhereUniqueInput {
+  id: ID!
+}
+
 type Mutation {
   createItem(input: CreateItemInput!): Item
-  unvoteItem(input: VoteItemInput!): Item
-  voteItem(input: VoteItemInput!): Item
+  deleteItem(input: ItemWhereUniqueInput!): Item
+  unvoteItem(input: ItemWhereUniqueInput!): Item
+  voteItem(input: ItemWhereUniqueInput!): Item
 }
 
 type Query {
   items: [Item!]
-}
-
-input VoteItemInput {
-  itemId: ID!
 }

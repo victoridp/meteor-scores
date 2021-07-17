@@ -20,10 +20,23 @@ export const Mutation = objectType({
 				});
 			},
 		});
+		t.field("deleteItem", {
+			type: "Item",
+			args: {
+				input: nonNull("ItemWhereUniqueInput"),
+			},
+			resolve: (_, args, ctx) => {
+				return prisma.item.delete({
+					where: {
+						id: args.input.id
+					},
+				});
+			},
+		});
 		t.field("voteItem", {
 			type: "Item",
 			args: {
-				input: nonNull("VoteItemInput"),
+				input: nonNull("ItemWhereUniqueInput"),
 			},
 			resolve: (_, args, ctx) => {
 				return prisma.item.update({
@@ -33,7 +46,7 @@ export const Mutation = objectType({
 						},
 					},
 					where: {
-						id: args.input.itemId,
+						id: args.input.id,
 					},
 				});
 			},
@@ -41,7 +54,7 @@ export const Mutation = objectType({
 		t.field("unvoteItem", {
 			type: "Item",
 			args: {
-				input: nonNull("VoteItemInput"),
+				input: nonNull("ItemWhereUniqueInput"),
 			},
 			resolve: (_, args, ctx) => {
 				return prisma.item.update({
@@ -51,7 +64,7 @@ export const Mutation = objectType({
 						},
 					},
 					where: {
-						id: args.input.itemId,
+						id: args.input.id,
 					},
 				});
 			},

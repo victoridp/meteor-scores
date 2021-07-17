@@ -32,8 +32,8 @@ export interface NexusGenInputs {
     name: string; // String!
     score: number; // Int!
   }
-  VoteItemInput: { // input type
-    itemId: string; // ID!
+  ItemWhereUniqueInput: { // input type
+    id: string; // ID!
   }
 }
 
@@ -77,6 +77,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createItem: NexusGenRootTypes['Item'] | null; // Item
+    deleteItem: NexusGenRootTypes['Item'] | null; // Item
     unvoteItem: NexusGenRootTypes['Item'] | null; // Item
     voteItem: NexusGenRootTypes['Item'] | null; // Item
   }
@@ -93,6 +94,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createItem: 'Item'
+    deleteItem: 'Item'
     unvoteItem: 'Item'
     voteItem: 'Item'
   }
@@ -106,11 +108,14 @@ export interface NexusGenArgTypes {
     createItem: { // args
       input: NexusGenInputs['CreateItemInput']; // CreateItemInput!
     }
+    deleteItem: { // args
+      input: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
+    }
     unvoteItem: { // args
-      input: NexusGenInputs['VoteItemInput']; // VoteItemInput!
+      input: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
     }
     voteItem: { // args
-      input: NexusGenInputs['VoteItemInput']; // VoteItemInput!
+      input: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
     }
   }
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import FlipMove from "react-flip-move";
 import { Item } from "../types/common";
 import Player from "./Item";
 
@@ -19,7 +18,7 @@ export default function ItemList(props: { items: Item[] }) {
 	}
 	return (
 		<div>
-			<FlipMove maintainContainerHeight={true}>{renderRows()}</FlipMove>
+			{renderRows()}
 		</div>
 	);
 }

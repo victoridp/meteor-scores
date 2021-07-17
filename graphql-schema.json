@@ -88,13 +88,13 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "VoteItemInput",
+        "name": "ItemWhereUniqueInput",
         "description": null,
         "specifiedByUrl": null,
         "fields": null,
         "inputFields": [
           {
-            "name": "itemId",
+            "name": "id",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -221,6 +221,35 @@
             "deprecationReason": null
           },
           {
+            "name": "deleteItem",
+            "description": null,
+            "args": [
+              {
+                "name": "input",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ItemWhereUniqueInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Item",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "voteItem",
             "description": null,
             "args": [
@@ -232,7 +261,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "VoteItemInput",
+                    "name": "ItemWhereUniqueInput",
                     "ofType": null
                   }
                 },
@@ -261,7 +290,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "VoteItemInput",
+                    "name": "ItemWhereUniqueInput",
                     "ofType": null
                   }
                 },

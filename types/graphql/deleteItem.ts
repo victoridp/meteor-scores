@@ -6,20 +6,20 @@
 import { ItemWhereUniqueInput } from "./globalTypes";
 
 // ====================================================
-// GraphQL mutation operation: unvoteItem
+// GraphQL mutation operation: deleteItem
 // ====================================================
 
-export interface unvoteItem_unvoteItem {
+export interface deleteItem_deleteItem {
   __typename: "Item";
   id: string;
   name: string;
   score: number;
 }
 
-export interface unvoteItem {
-  unvoteItem: unvoteItem_unvoteItem | null;
+export interface deleteItem {
+  deleteItem: deleteItem_deleteItem | null;
 }
 
-export interface unvoteItemVariables {
+export interface deleteItemVariables {
   input: ItemWhereUniqueInput;
 }

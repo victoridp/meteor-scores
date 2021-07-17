@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } from "@reduxjs/toolkit";
 import numeral from "numeral";
-import { CREATE_ITEM, UNVOTE_ITEM, VOTE_ITEM } from "../graphql/mutations";
+import { CREATE_ITEM, DELETE_ITEM, UNVOTE_ITEM, VOTE_ITEM } from "../graphql/mutations";
 import { ITEMS } from "../graphql/queries";
 import client from "../lib/apolloClient";
 import { Item } from "../types/common";
 import { createItem, createItemVariables } from "../types/graphql/createItem";
-import { CreateItemInput } from "../types/graphql/globalTypes";
+import { deleteItem, deleteItemVariables } from "../types/graphql/deleteItem";
+import { CreateItemInput, ItemWhereUniqueInput } from "../types/graphql/globalTypes";
 import { items, items_items } from "../types/graphql/items";
 import { unvoteItem, unvoteItemVariables } from "../types/graphql/unvoteItem";
 import { voteItem, voteItemVariables } from "../types/graphql/voteItem";
@@ -17,6 +18,7 @@ type ItemsList = {
 	items: items_items[];
 	loading: boolean;
 	creating: boolean;
+	deleting: boolean;
 	voting: boolean;
 };
 
@@ -25,6 +27,7 @@ const initialState: ItemsList = {
 	loading: false,
 	voting: false,
 	creating: false,
+	deleting: false,
 };
 
 export const getItems = createAsyncThunk(
@@ -47,12 +50,22 @@ export const addNewItem = createAsyncThunk(`${SLICE_NAME}/addNewItem`, async (in
 	return data?.createItem;
 });
 
+export const removeItem = createAsyncThunk(`${SLICE_NAME}/removeItem`, async (input: ItemWhereUniqueInput) => {
+	const { data } = await client.mutate<deleteItem, deleteItemVariables>({
+		mutation: DELETE_ITEM,
+		variables: {
+			input
+		}
+	});
+	return data?.deleteItem;
+});
+
 export const addVote = createAsyncThunk(`${SLICE_NAME}/addVote`, async (args: {itemId: string}) => {
 	const { data } = await client.mutate<voteItem, voteItemVariables>({
 		mutation: VOTE_ITEM,
 		variables: {
 			input: {
-				itemId: args.itemId
+				id: args.itemId
 			}
 		}
 	});
@@ -66,7 +79,7 @@ export const removeVote = createAsyncThunk(
 			mutation: UNVOTE_ITEM,
 			variables: {
 				input: {
-					itemId: args.itemId
+					id: args.itemId
 				}
 			}
 		});
@@ -94,11 +107,20 @@ export const slice = createSlice({
 		});
 		builder.addCase(addNewItem.fulfilled, (state, action) => {
 			state.creating = false;
-			console.log(action.payload)
 			state.items.push(action.payload!);
 		});
 		builder.addCase(addNewItem.rejected, (state, action) => {
 			state.creating = false;
+		});
+		builder.addCase(removeItem.pending, (state, action) => {
+			state.deleting = true;
+		});
+		builder.addCase(removeItem.fulfilled, (state, action) => {
+			state.deleting = false;
+			state.items = state.items.filter(i => i.id !== action.payload?.id)
+		});
+		builder.addCase(removeItem.rejected, (state, action) => {
+			state.deleting = false;
 		});
 		builder.addMatcher(isPending(addVote, removeVote), (state, action) => {
 			state.voting = true;

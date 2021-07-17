@@ -7,9 +7,9 @@ export const CreateItemInput = inputObjectType({
 		t.nonNull.int("score");
 	},
 });
-export const VoteItemInput = inputObjectType({
-	name: "VoteItemInput",
+export const ItemWhereUniqueInput = inputObjectType({
+	name: "ItemWhereUniqueInput",
 	definition(t) {
-		t.nonNull.id("itemId");
+		t.nonNull.id("id");
 	},
 });

@@ -12,8 +12,8 @@ export interface CreateItemInput {
   score: number;
 }
 
-export interface VoteItemInput {
-  itemId: string;
+export interface ItemWhereUniqueInput {
+  id: string;
 }
 
 //==============================================================

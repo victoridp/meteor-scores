@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { VoteItemInput } from "./globalTypes";
+import { ItemWhereUniqueInput } from "./globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: voteItem
@@ -21,5 +21,5 @@ export interface voteItem {
 }
 
 export interface voteItemVariables {
-  input: VoteItemInput;
+  input: ItemWhereUniqueInput;
 }
