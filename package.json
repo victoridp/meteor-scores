@@ -1,19 +1,48 @@
 {
-  "name": "scores-app",
+  "name": "score-boards",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "generate": "npm -s run generate:prisma && npm -s run generate:nexus",
+    "generate:prisma": "prisma generate",
+    "generate:nexus": "ts-node --transpile-only -P nexus.tsconfig.json pages/api/graphql",
+    "schema": "npm-run-all schema:* --silent",
+    "schema:introspect": "npx apollo schema:download graphql-schema.json",
+    "schema:generate": "npx apollo client:codegen types/graphql --outputFlat --target typescript"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.42",
-    "meteor-node-stubs": "^0.3.2",
+    "@apollo/client": "^3.4.8",
+    "@prisma/client": "^2.29.1",
+    "@reduxjs/toolkit": "^1.6.1",
+    "apollo-server-core": "^3.1.2",
+    "apollo-server-micro": "^3.1.2",
+    "express": "^4.17.1",
+    "graphql": "^15.5.1",
+    "graphql-scalars": "^1.10.0",
+    "micro": "^9.3.4",
+    "next": "11.0.1",
+    "nexus": "^1.1.0",
     "numeral": "^2.0.6",
-    "prop-types": "^15.6.1",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
-    "react-flip-move": "^3.0.1"
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-redux": "^7.2.4",
+    "redux-persist": "^6.0.0",
+    "sass": "^1.35.2"
   },
-  "engines": {
-    "node": "8.11.1"
+  "devDependencies": {
+    "@types/node": "^16.3.2",
+    "@types/numeral": "^2.0.1",
+    "@types/react": "17.0.14",
+    "eslint": "7.30.0",
+    "eslint-config-next": "11.0.1",
+    "npm-run-all": "^4.1.5",
+    "prisma": "^2.29.1",
+    "prop-types": "^15.7.2",
+    "ts-node": "^10.1.0",
+    "typescript": "4.3.5"
   }
 }
